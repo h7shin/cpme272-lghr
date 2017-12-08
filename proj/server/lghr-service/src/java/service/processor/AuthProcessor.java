@@ -25,13 +25,19 @@ public class AuthProcessor extends PostProcessor {
     String handle() throws Exception {
        JSONObject requestBody = new JSONObject( body );
        JSONObject info = new JSONObject();
+       String token = "abc123";
        try {
           String username = requestBody.getString( "username" );
           String password = requestBody.getString( "password" );
           System.out.println( "Username is " + username );
-          String token = authenticate( username, password );
-          info.put("error", "");
-          info.put("value", token );
+          String response = authenticate( username, password );
+          if ( response.contains( "Accept" ) ) {
+             info.put("error", "");
+             info.put("value", token );
+          } else {
+             info.put("error", "Authentication Error" );
+             info.put("value", "" );
+          }  
        } catch (Exception e) {
           info.put("error", "Not authenticated");
           info.put("value", "" );
